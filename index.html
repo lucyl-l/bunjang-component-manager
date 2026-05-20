@@ -432,8 +432,6 @@ th.g-label{text-align:center;font-size:11px;font-weight:600;padding:9px 16px;bor
     <div class="tokens-form-section"><label>사용 토큰</label><div id="tokensEntries"></div><div style="display:flex;gap:8px;margin-top:10px"><button class="btn-add-tok" onclick="addTokenEntry()">+ 직접 추가</button><button class="btn-add-tok" onclick="document.getElementById('addTokenJsonFileInput').click()">+ json 불러오기</button></div></div>
     <div class="form-row"><label>하드코딩 사용</label><div class="pill-group" id="newTokenTypePills"></div></div>
     <hr class="modal-divider">
-    <div class="dodont-form-section"><label>Do/Don't</label><div id="dodontEntries"></div><button class="btn-add-dd" onclick="addDodontEntry()">+ 항목 추가</button></div>
-    <hr class="modal-divider">
     <div class="form-row"><label>비고</label><textarea id="newNote" class="note-area" placeholder="자유롭게 입력하세요" style="min-height:80px"></textarea></div>
     <div class="form-actions"><button class="btn btn-primary" id="confirmAdd">추가</button></div>
   </div>
@@ -453,7 +451,6 @@ th.g-label{text-align:center;font-size:11px;font-weight:600;padding:9px 16px;bor
       <div class="section"><div class="section-title">Props</div><div class="props-grid" id="modalProps"></div><div id="propsAddArea"></div></div>
       <div class="section"><div class="section-title">사용 중인 토큰</div><div class="token-tabs" id="tokenTabs"></div><div class="token-list" id="tokenList"></div><div id="tokenAddArea"></div></div>
       <div class="section"><div class="section-title">하드코딩</div><div id="hardcodedContainer"></div></div>
-      <div class="section" id="dodontSection"><div class="section-title">Do/Don't</div><div class="dodont-list" id="modalDodont"></div><div id="dodontAddArea"></div></div>
       <div class="section"><div class="section-title">비고</div><div id="noteContainer"></div></div>
       <div class="section"><div class="section-title">최근 업데이트</div><div id="modalUpdateDetail" style="font-size:14px;color:var(--text-2)"></div></div>
       <div class="modal-footer">
