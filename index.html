@@ -112,7 +112,7 @@ td.col-update{font-size:13px;color:var(--text-3)}
 .token-type-tag{display:inline-flex;align-items:center;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:500;line-height:1.5;white-space:nowrap}
 .token-type-tag.tt-comp{background:#EDE7F6;color:#5E35B1}
 .token-type-tag.tt-sem{background:#E1F5FE;color:#0277BD}
-.token-type-tag.tt-hard{background:#FFF3E0;color:#E65100}
+.token-type-tag.tt-hard{background:#FFEBEE;color:#C62828}
 .token-type-tag.tt-default{background:#EEEEEE;color:#616161}
 
 /* Pill toggles in modal — active state matches table tag colors */
@@ -126,7 +126,7 @@ td.col-update{font-size:13px;color:var(--text-3)}
 .pill-btn.p-done.active{background:#F5F5F5;color:#9E9E9E;border-color:#E0E0E0}
 .pill-btn.tt-comp.active{background:#EDE7F6;color:#5E35B1;border-color:#D1C4E9}
 .pill-btn.tt-sem.active{background:#E1F5FE;color:#0277BD;border-color:#B3E5FC}
-.pill-btn.tt-hard.active{background:#FFF3E0;color:#E65100;border-color:#FFE0B2}
+.pill-btn.tt-hard.active{background:#FFEBEE;color:#C62828;border-color:#FFCDD2}
 .meta-grid{display:flex;gap:32px;flex-wrap:wrap}
 .meta-grid>div{min-width:180px}
 
@@ -143,8 +143,8 @@ th.g-label{text-align:center;font-size:11px;font-weight:600;padding:9px 16px;bor
 .sem-toggle.active{background:#E1F5FE;color:#0277BD;border-color:#B3E5FC;font-weight:600}
 
 /* Tokens entry form (in add modal) */
-.tokens-form-section{margin-bottom:16px}
-.tokens-form-section>label{display:block;font-size:13px;color:var(--text-3);margin-bottom:8px;font-weight:500}
+.tokens-form-section{margin-bottom:28px}
+.tokens-form-section>label{display:block;font-size:13px;color:var(--text-3);margin-bottom:10px;font-weight:500}
 .token-entry{display:flex;gap:6px;align-items:center;margin-bottom:6px;flex-wrap:wrap}
 .token-entry select.tok-cat{padding:10px 28px 10px 14px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:14px;outline:none;background:var(--surface);width:120px;-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23999' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;color:var(--text);cursor:pointer;flex-shrink:0}
 .token-entry input{padding:10px 14px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:14px;outline:none;min-width:0}
@@ -153,8 +153,8 @@ th.g-label{text-align:center;font-size:11px;font-weight:600;padding:9px 16px;bor
 .token-entry input:focus{border-color:var(--accent)}
 .btn-remove-tok{padding:4px 8px;border:none;background:transparent;cursor:pointer;color:var(--text-3);font-size:16px;flex-shrink:0}
 .btn-remove-tok:hover{color:#C62828}
-.btn-add-tok{padding:10px 14px;border:1px dashed var(--border);border-radius:var(--radius-sm);font-size:13px;cursor:pointer;background:transparent;color:var(--text-3);margin-top:4px}
-.btn-add-tok:hover{border-color:var(--text);color:var(--text)}
+.btn-add-tok{flex:1;padding:11px 14px;border:1px dashed var(--border);border-radius:var(--radius-sm);font-size:13px;cursor:pointer;background:transparent;color:var(--text-3);text-align:center;transition:all .15s}
+.btn-add-tok:hover{border-color:#1a1a1a;color:#1a1a1a}
 
 .empty-state{text-align:center;padding:40px;color:var(--text-3);font-size:15px}
 
@@ -206,9 +206,16 @@ th.g-label{text-align:center;font-size:11px;font-weight:600;padding:9px 16px;bor
 .prop-add-form-row .btn{padding:8px 14px;font-size:13px;flex-shrink:0}
 
 .dodont-list{display:flex;flex-direction:column;gap:6px}
-.dodont-item{display:flex;flex-direction:column;align-items:flex-start;justify-content:space-between;padding:10px 16px 10px 4px;border-radius:var(--radius-sm);font-size:14px;line-height:1.5;position:relative;gap:6px}
+.dodont-item{display:flex;flex-direction:row;align-items:stretch;padding:10px 12px;border-radius:var(--radius-sm);font-size:14px;line-height:1.5;position:relative;gap:10px}
 .dodont-item-header{display:flex;align-items:center;width:100%;gap:6px}
-.dodont-image{max-width:300px;max-height:200px;margin-top:6px;border-radius:var(--radius-sm);display:block}
+.dodont-image{width:64px;height:64px;border-radius:var(--radius-sm);display:block;object-fit:cover;cursor:pointer;flex-shrink:0}
+.dodont-img-placeholder{width:64px;height:64px;border-radius:var(--radius-sm);flex-shrink:0;display:flex;align-items:center;justify-content:center;cursor:pointer;border:1px dashed currentColor;opacity:.3;transition:opacity .15s}
+.dodont-img-placeholder:hover{opacity:.7}
+.img-lightbox{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:500;justify-content:center;align-items:center}
+.img-lightbox.active{display:flex}
+.img-lightbox img{max-width:88vw;max-height:88vh;border-radius:12px;object-fit:contain;display:block}
+.img-lightbox-close{position:fixed;top:20px;right:24px;width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.15);border:none;color:#fff;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);transition:background .15s}
+.img-lightbox-close:hover{background:rgba(255,255,255,.3)}
 .drag-handle{cursor:grab;color:currentColor;padding:0 4px;display:flex;align-items:center;flex-shrink:0;opacity:.35}
 .drag-handle:hover{opacity:.85}
 .drag-handle:active{cursor:grabbing}
@@ -255,12 +262,12 @@ th.g-label{text-align:center;font-size:11px;font-weight:600;padding:9px 16px;bor
 .add-overlay.active{display:flex}
 .add-modal{background:var(--surface);border-radius:14px;width:100%;max-width:600px;max-height:90vh;overflow-y:auto;padding:28px}
 .add-modal h3{font-size:18px;font-weight:600;margin-bottom:20px;display:flex;justify-content:space-between;align-items:center}
-.form-row{margin-bottom:16px}
+.form-row{margin-bottom:24px}
 .form-row label{display:block;font-size:13px;color:var(--text-3);margin-bottom:5px;font-weight:500}
 .form-row input{width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:14px;outline:none}
 .form-row input:focus{border-color:var(--accent)}
-.props-form-section{margin-bottom:16px}
-.props-form-section>label{display:block;font-size:13px;color:var(--text-3);margin-bottom:8px;font-weight:500}
+.props-form-section{margin-bottom:28px}
+.props-form-section>label{display:block;font-size:13px;color:var(--text-3);margin-bottom:10px;font-weight:500}
 .prop-entry{display:flex;gap:8px;align-items:flex-start;margin-bottom:8px}
 .prop-entry input.prop-key{width:140px;padding:10px 14px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:14px;outline:none;font-weight:500}
 .prop-entry input.prop-key:focus{border-color:var(--accent)}
@@ -271,19 +278,20 @@ th.g-label{text-align:center;font-size:11px;font-weight:600;padding:9px 16px;bor
 .btn-add-opt:hover{border-color:var(--text);color:var(--text)}
 .btn-remove-prop{padding:4px 8px;border:none;background:transparent;cursor:pointer;color:var(--text-3);font-size:16px}
 .btn-remove-prop:hover{color:#C62828}
-.btn-add-prop{padding:10px 14px;border:1px dashed var(--border);border-radius:var(--radius-sm);font-size:13px;cursor:pointer;background:transparent;color:var(--text-3);margin-top:4px}
-.btn-add-prop:hover{border-color:var(--text);color:var(--text)}
-.dodont-form-section{margin-bottom:16px}
-.dodont-form-section>label{display:block;font-size:13px;color:var(--text-3);margin-bottom:8px;font-weight:500}
+.btn-add-prop{width:100%;padding:11px 14px;border:1px dashed var(--border);border-radius:var(--radius-sm);font-size:13px;cursor:pointer;background:transparent;color:var(--text-3);margin-top:8px;text-align:center;transition:all .15s}
+.btn-add-prop:hover{border-color:#1a1a1a;color:#1a1a1a}
+.dodont-form-section{margin-bottom:28px}
+.modal-divider{border:none;border-top:1px solid var(--border-light);margin:0 0 24px}
+.dodont-form-section>label{display:block;font-size:13px;color:var(--text-3);margin-bottom:10px;font-weight:500}
 .dodont-entry{display:flex;gap:6px;align-items:center;margin-bottom:6px}
-.dodont-entry select{padding:10px 28px 10px 14px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:14px;outline:none;background:var(--surface);width:140px;-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23999' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;color:var(--text);cursor:pointer}
+.dodont-entry select{padding:10px 26px 10px 10px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:14px;outline:none;background:var(--surface);width:96px;-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23999' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 8px center;color:var(--text);cursor:pointer;flex-shrink:0}
 .dodont-entry input{flex:1;padding:10px 14px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:14px;outline:none}
 .dodont-entry input:focus{border-color:var(--accent)}
 .btn-remove-dd{padding:4px 8px;border:none;background:transparent;cursor:pointer;color:var(--text-3);font-size:16px}
 .btn-remove-dd:hover{color:#C62828}
-.btn-add-dd{padding:10px 14px;border:1px dashed var(--border);border-radius:var(--radius-sm);font-size:13px;cursor:pointer;background:transparent;color:var(--text-3);margin-top:4px}
-.btn-add-dd:hover{border-color:var(--text);color:var(--text)}
-.form-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:20px;padding-top:16px;border-top:1px solid var(--border-light)}
+.btn-add-dd{width:100%;padding:11px 14px;border:1px dashed var(--border);border-radius:var(--radius-sm);font-size:13px;cursor:pointer;background:transparent;color:var(--text-3);margin-top:8px;text-align:center;transition:all .15s}
+.btn-add-dd:hover{border-color:#1a1a1a;color:#1a1a1a}
+.form-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:20px;padding-top:16px}
 
 /* Inline editable inputs */
 .prop-name-input,.token-name-input,.token-desc-input,.dodont-text-input{
@@ -319,6 +327,8 @@ th.g-label{text-align:center;font-size:11px;font-weight:600;padding:9px 16px;bor
   color:#B71C1C;
 }
 </style>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 </head>
 <body>
 
@@ -415,10 +425,16 @@ th.g-label{text-align:center;font-size:11px;font-weight:600;padding:9px 16px;bor
     <h3>컴포넌트 추가 <button class="close-btn" id="addClose">&times;</button></h3>
     <div class="form-row"><label>컴포넌트명</label><input id="newName" placeholder="예: Button"></div>
     <div class="form-row"><label>우선순위</label><div class="pill-group" id="newPriorityPills"></div></div>
-    <div class="form-row"><label>하드코딩 사용</label><div class="pill-group" id="newTokenTypePills"></div></div>
-    <div class="tokens-form-section"><label>사용 토큰</label><div id="tokensEntries"></div><div style="display:flex;gap:8px;margin-top:4px"><button class="btn-add-tok" onclick="addTokenEntry()">직접 추가</button><button class="btn-add-tok" onclick="document.getElementById('addTokenJsonFileInput').click()">json 파일로 불러오기</button></div></div>
+    <div class="form-row"><label>플랫폼별 진행 상태</label><div class="platform-grid" id="newPlatformGrid"></div></div>
+    <hr class="modal-divider">
     <div class="props-form-section"><label>Props / Variants</label><div id="propsEntries"></div><button class="btn-add-prop" onclick="addPropEntry()">+ Props 추가</button></div>
+    <hr class="modal-divider">
+    <div class="tokens-form-section"><label>사용 토큰</label><div id="tokensEntries"></div><div style="display:flex;gap:8px;margin-top:10px"><button class="btn-add-tok" onclick="addTokenEntry()">+ 직접 추가</button><button class="btn-add-tok" onclick="document.getElementById('addTokenJsonFileInput').click()">+ json 불러오기</button></div></div>
+    <div class="form-row"><label>하드코딩 사용</label><div class="pill-group" id="newTokenTypePills"></div></div>
+    <hr class="modal-divider">
     <div class="dodont-form-section"><label>Do/Don't</label><div id="dodontEntries"></div><button class="btn-add-dd" onclick="addDodontEntry()">+ 항목 추가</button></div>
+    <hr class="modal-divider">
+    <div class="form-row"><label>비고</label><textarea id="newNote" class="note-area" placeholder="자유롭게 입력하세요" style="min-height:80px"></textarea></div>
     <div class="form-actions"><button class="btn btn-primary" id="confirmAdd">추가</button></div>
   </div>
 </div>
@@ -446,6 +462,12 @@ th.g-label{text-align:center;font-size:11px;font-weight:600;padding:9px 16px;bor
       </div>
     </div>
   </div>
+</div>
+
+<!-- Image lightbox -->
+<div class="img-lightbox" id="imgLightbox" onclick="closeImgLightbox()">
+  <button class="img-lightbox-close" onclick="closeImgLightbox()">&times;</button>
+  <img id="imgLightboxImg" src="" onclick="event.stopPropagation()">
 </div>
 
 <!-- Delete confirm dialog -->
@@ -486,92 +508,27 @@ function tokenTypesCellHTML(comp){
   return`<div class="token-types-cell">${types.map(t=>`<span class="token-type-tag ${t.cls}">${t.text}</span>`).join('')}</div>`;
 }
 
-let components=[
-  {id:1,name:'Button',
-  props:{
-    variant:['Brand Solid','Brand Weak','Neutral','Neutral Weak','Positive'],
-    size:['XS','SM','MD','LG','XL'],
-    state:['Default','Pressed','Disabled','Loading'],
-    width:['Fit Content','Fill Container'],
-    iconOnly:['true','false'],
-    leadingIcon:['true','false'],
-    trailingIcon:['true','false']
-  },
-  status:{design:'시작 전',ios:'시작 전',android:'시작 전',web:'시작 전'},
-  priority:'상',
-  tokenTypes:[],
-  hardcoded:'',
-  tokens:[
-    {cat:'Color',name:'button.brandSolid.container.bg.enabled',desc:'{color.bg.brand.solid}'},
-    {cat:'Color',name:'button.brandSolid.container.bg.pressed',desc:'{color.bg.brand.solid-pressed}'},
-    {cat:'Color',name:'button.brandSolid.container.bg.disabled',desc:'{color.bg.brand.solid-disabled}'},
-    {cat:'Color',name:'button.brandSolid.label.color.enabled',desc:'{color.fg.brand.on-solid}'},
-    {cat:'Color',name:'button.brandSolid.label.color.pressed',desc:'{color.fg.brand.on-solid-pressed}'},
-    {cat:'Color',name:'button.brandSolid.label.color.disabled',desc:'{color.fg.brand.on-solid-disabled}'},
-    {cat:'Color',name:'button.brandSolid.icon.color.enabled',desc:'{color.fg.brand.on-solid}'},
-    {cat:'Color',name:'button.brandWeak.container.bg.enabled',desc:'{color.bg.brand.weak}'},
-    {cat:'Color',name:'button.brandWeak.container.bg.pressed',desc:'{color.bg.brand.weak-pressed}'},
-    {cat:'Color',name:'button.brandWeak.container.bg.disabled',desc:'{color.bg.brand.weak-disabled}'},
-    {cat:'Color',name:'button.brandWeak.label.color.enabled',desc:'{color.fg.brand.contrast}'},
-    {cat:'Color',name:'button.brandWeak.label.color.pressed',desc:'{color.fg.brand.contrast-pressed}'},
-    {cat:'Color',name:'button.brandWeak.label.color.disabled',desc:'{color.fg.brand.contrast-disabled}'},
-    {cat:'Color',name:'button.neutralSolid.container.bg.enabled',desc:'{color.bg.neutral.solid}'},
-    {cat:'Color',name:'button.neutralSolid.container.bg.pressed',desc:'{color.bg.neutral.solid-pressed}'},
-    {cat:'Color',name:'button.neutralSolid.container.bg.disabled',desc:'{color.bg.neutral.solid-disabled}'},
-    {cat:'Color',name:'button.neutralSolid.label.color.enabled',desc:'{color.fg.neutral.on-solid}'},
-    {cat:'Color',name:'button.neutralSolid.label.color.pressed',desc:'{color.fg.neutral.on-solid-pressed}'},
-    {cat:'Color',name:'button.neutralSolid.label.color.disabled',desc:'{color.fg.neutral.on-solid-disabled}'},
-    {cat:'Color',name:'button.neutralWeak.container.bg.enabled',desc:'{color.bg.neutral.weak}'},
-    {cat:'Color',name:'button.neutralWeak.container.bg.pressed',desc:'{color.bg.neutral.weak-pressed}'},
-    {cat:'Color',name:'button.neutralWeak.container.bg.disabled',desc:'{color.bg.neutral.weak-disabled}'},
-    {cat:'Color',name:'button.neutralWeak.label.color.enabled',desc:'{color.fg.neutral.contrast}'},
-    {cat:'Color',name:'button.neutralWeak.label.color.pressed',desc:'{color.fg.neutral.contrast-pressed}'},
-    {cat:'Color',name:'button.neutralWeak.label.color.disabled',desc:'{color.fg.neutral.contrast-disabled}'},
-    {cat:'Color',name:'button.positiveWeak.container.bg.enabled',desc:'{color.bg.positive.weak}'},
-    {cat:'Color',name:'button.positiveWeak.container.bg.pressed',desc:'{color.bg.positive.weak-pressed}'},
-    {cat:'Color',name:'button.positiveWeak.container.bg.disabled',desc:'{color.bg.positive.weak-disabled}'},
-    {cat:'Color',name:'button.positiveWeak.label.color.enabled',desc:'{color.fg.positive.contrast}'},
-    {cat:'Color',name:'button.positiveWeak.label.color.pressed',desc:'{color.fg.positive.contrast-pressed}'},
-    {cat:'Color',name:'button.positiveWeak.label.color.disabled',desc:'{color.fg.positive.contrast-disabled}'},
-    {cat:'Typography',name:'button.size-xs.label.typography',desc:'{typography.label.bold.xs}'},
-    {cat:'Typography',name:'button.size-sm.label.typography',desc:'{typography.label.bold.xs}'},
-    {cat:'Typography',name:'button.size-md.label.typography',desc:'{typography.label.bold.sm}'},
-    {cat:'Typography',name:'button.size-lg.label.typography',desc:'{typography.label.bold.md}'},
-    {cat:'Typography',name:'button.size-xl.label.typography',desc:'{typography.label.bold.lg}'},
-    {cat:'Spacing',name:'button.size-xs.container.padding-x',desc:'{spacing.padding.md}'},
-    {cat:'Spacing',name:'button.size-sm.container.padding-x',desc:'{spacing.padding.lg}'},
-    {cat:'Spacing',name:'button.size-md.container.padding-x',desc:'{spacing.padding.xl}'},
-    {cat:'Spacing',name:'button.size-lg.container.padding-x',desc:'{spacing.padding.xl}'},
-    {cat:'Spacing',name:'button.size-xl.container.padding-x',desc:'{spacing.padding.xl}'},
-    {cat:'Spacing',name:'button.container.gap',desc:'{spacing.gap-x.xs}'},
-    {cat:'Spacing',name:'button.iconOnly.container.padding-x',desc:'{spacing.padding.sm}'},
-    {cat:'Radius',name:'button.size-xs.container.radius',desc:'{radius.xs}'},
-    {cat:'Radius',name:'button.size-sm.container.radius',desc:'{radius.xs}'},
-    {cat:'Radius',name:'button.size-md.container.radius',desc:'{radius.sm}'},
-    {cat:'Radius',name:'button.size-lg.container.radius',desc:'{radius.sm}'},
-    {cat:'Radius',name:'button.size-xl.container.radius',desc:'{radius.sm}'},
-    {cat:'Sizing',name:'button.size-xs.container.height',desc:'{sizing.height.xs}'},
-    {cat:'Sizing',name:'button.size-sm.container.height',desc:'{sizing.height.sm}'},
-    {cat:'Sizing',name:'button.size-md.container.height',desc:'{sizing.height.md}'},
-    {cat:'Sizing',name:'button.size-lg.container.height',desc:'{sizing.height.lg}'},
-    {cat:'Sizing',name:'button.size-xl.container.height',desc:'{sizing.height.xl}'},
-    {cat:'Sizing',name:'button.size-xs.icon.size',desc:'{sizing.icon.xs}'},
-    {cat:'Sizing',name:'button.size-sm.icon.size',desc:'{sizing.icon.sm}'},
-    {cat:'Sizing',name:'button.size-md.icon.size',desc:'{sizing.icon.md}'},
-    {cat:'Sizing',name:'button.size-lg.icon.size',desc:'{sizing.icon.md}'},
-    {cat:'Sizing',name:'button.size-xl.icon.size',desc:'{sizing.icon.md}'}
-  ],
-  dodont:[
-    {type:'do',text:'주요 CTA에는 Brand Solid variant를 사용한다'},
-    {type:'do',text:'라벨은 항상 1줄로 유지한다'},
-    {type:'dont',text:'Leading/Trailing Icon을 동시에 사용하지 않는다'},
-    {type:'do',text:'State 전환 애니메이션은 0.12초 ease-out을 따른다'}
-  ],
-  note:'사용자 액션 유도 Composite. DSText(라벨) + DSIcon(아이콘) 합성.',
-  updates:[new Date().toISOString().slice(0,10)+' 컴포넌트 추가']}
-];
+let components=[];
 
 let nextId=2,currentComp=null,activeTokenCat='All',openMenuIdx=null;
+// ── Firebase ──────────────────────────────────────
+const firebaseConfig={apiKey:"AIzaSyA3h9WiKhKvCVIDba7lJ2qfa49e2TAL2YQ",authDomain:"component-manager-dd394.firebaseapp.com",projectId:"component-manager-dd394",storageBucket:"component-manager-dd394.firebasestorage.app",messagingSenderId:"243911232640",appId:"1:243911232640:web:330329b71b91f868562a65"};
+firebase.initializeApp(firebaseConfig);
+const db=firebase.firestore();
+let isModalOpen=false;
+function saveComp(comp){if(!comp)return;const data=JSON.parse(JSON.stringify(comp));db.collection('components').doc(String(comp.id)).set(data).catch(function(e){console.error('저장 오류:',e)});}
+function deleteCompFromDB(id){db.collection('components').doc(String(id)).delete().catch(function(e){console.error('삭제 오류:',e)});}
+function initFirebase(){
+  document.getElementById('tableBody').innerHTML='<tr><td colspan="8" style="text-align:center;padding:40px;color:var(--text-3);font-size:14px">🔄 데이터 불러오는 중...</td></tr>';
+  db.collection('components').onSnapshot(function(snapshot){
+    if(isModalOpen)return;
+    components=snapshot.docs.map(function(doc){return doc.data()});
+    components.sort(function(a,b){return a.id-b.id});
+    nextId=components.length>0?Math.max.apply(null,components.map(function(c){return c.id}))+1:1;
+    renderTable();renderStats();
+  },function(err){console.error('Firestore 오류:',err);});
+}
+// ─────────────────────────────────────────────────
 
 function getStatusClass(v){return v==='완료'?'s-done':v==='시작 전'?'s-not':'s-progress'}
 function getStatusLabel(v){return v==='완료'||v==='시작 전'?v:v+' 중'}
@@ -645,6 +602,7 @@ function renderTable(){
 }
 
 function openModal(id){
+  isModalOpen=true;
   currentComp=components.find(c=>c.id===id);if(!currentComp)return;openMenuIdx=null;activeAddPropKey=null;
   if(!currentComp.priority)currentComp.priority='중';
   if(!currentComp.tokenTypes)currentComp.tokenTypes=[];
@@ -686,6 +644,7 @@ function toggleEditMode(){
     /*editModeFooterBtn removed*/
     document.getElementById('deleteCompBtn').style.display='none';
     compareAndLogChanges();
+    saveComp(currentComp);
   }
   renderPriority();renderProps();renderDodont();renderNote();renderTokenList();renderHardcoded();
   const plats=[{key:'design',label:'Design',stages:DESIGN_STAGES},{key:'ios',label:'iOS',stages:DEV_STAGES},{key:'android',label:'Android',stages:DEV_STAGES},{key:'web',label:'Web',stages:DEV_STAGES}];
@@ -768,6 +727,7 @@ function setPriority(p){
   if(!currentComp||!modalEditMode)return;
   if(currentComp.priority===p)return;
   currentComp.priority=p;
+  saveComp(currentComp);
   renderPriority();renderTable();
 }
 function renderTokenSummary(){
@@ -783,7 +743,7 @@ function renderTokenSummary(){
   if(hasHard)types.push({text:'하드코딩 존재',cls:'tt-hard'});
   const el=document.getElementById('modalTokenSummary');
   if(!types.length){el.innerHTML='<span style="color:var(--text-3);font-size:13px">—</span>';return}
-  el.innerHTML=`<div class="token-types-cell" style="gap:6px">${types.map(t=>`<span class="token-type-tag ${t.cls}" style="padding:3px 10px;font-size:12px;font-weight:600;border-radius:12px;line-height:1.3">${t.text}</span>`).join('')}</div>`;
+  el.innerHTML=`<div class="pill-group">${types.map(t=>`<span class="token-type-tag ${t.cls}" style="padding:7px 14px;font-size:13px;font-weight:500;border-radius:20px;line-height:1">${t.text}</span>`).join('')}</div>`;
 }
 function renderHardcoded(){
   var c=document.getElementById('hardcodedContainer');
@@ -802,10 +762,11 @@ function saveHardcoded(){
   const oldHasContent=!!(currentComp.hardcoded&&currentComp.hardcoded.trim());
   currentComp.hardcoded=document.getElementById('hardcodedInput').value.trim();
   const newHasContent=!!currentComp.hardcoded;
+  saveComp(currentComp);
   renderHardcoded();
   if(oldHasContent!==newHasContent){renderTokenSummary();renderTable()}
 }
-function deleteHardcoded(){currentComp.hardcoded='';renderHardcoded();renderTokenSummary();renderTable()}
+function deleteHardcoded(){currentComp.hardcoded='';saveComp(currentComp);renderHardcoded();renderTokenSummary();renderTable()}
 
 // Props CRUD
 let openPropMenuIdx=null,activeAddPropKey=null;
@@ -864,10 +825,16 @@ function renderDodont(){
       var label=d.type==='do'?'DO':'DON’T';
       var safeText=(d.text||'').replace(/"/g,'&quot;');
       var delBtn=modalEditMode?'<button style="width:20px;height:20px;padding:0;border:none;background:transparent;color:#bbb;cursor:pointer;font-size:16px;flex-shrink:0" onclick="event.stopPropagation();deleteDodont('+i+')">✕</button>':'';
-      var imgArea='';
-      if(d.image){imgArea='<div style="margin-top:8px;position:relative;display:inline-block"><img src="'+d.image+'" class="dodont-image" style="max-width:100%;display:block">'+(modalEditMode?'<button onclick="currentComp.dodont['+i+'].image=\'\';renderDodont()" style="position:absolute;top:-6px;right:-6px;width:22px;height:22px;border-radius:50%;background:#999;border:2px solid #fff;color:#fff;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;line-height:1">✕</button>':'')+'</div>';}
-      else if(modalEditMode){var phBorder=d.type==='do'?'#A5D6A7':'#EF9A9A';var phIcon=d.type==='do'?'#66BB6A':'#E57373';imgArea='<div style="margin-top:8px;width:80px;height:80px;background:transparent;border:1px dashed '+phBorder+';border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;cursor:pointer" onclick="document.getElementById(\'ddDetailImg'+i+'\').click()"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="'+phIcon+'" stroke-width="1.5"><line x1="10" y1="5" x2="10" y2="15"></line><line x1="5" y1="10" x2="15" y2="10"></line></svg></div><input type="file" id="ddDetailImg'+i+'" accept="image/*" style="display:none" onchange="handleDetailDdImage(event,'+i+')">';}
-      return '<div class="dodont-item dodont-'+d.type+'" draggable="true" ondragstart="ddDragStart(event,'+i+')" ondragover="ddDragOver(event)" ondragleave="ddDragLeave(event)" ondrop="ddDrop(event,'+i+')" ondragend="ddDragEnd(event)"><div class="dodont-item-header">'+HANDLE_HTML+'<div style="flex:1"><div style="display:flex;align-items:center;gap:8px"><span style="width:52px;flex-shrink:0;font-weight:600;text-align:left">'+label+'</span><input type="text" class="dodont-text-input" value="'+safeText+'" '+(modalEditMode?'':'readonly')+' style="flex:1;padding:4px 8px;background:transparent;border:none;outline:none;font-size:inherit;cursor:'+(modalEditMode?'text':'default')+'" onclick="event.stopPropagation()" onchange="editDodontText('+i+',this.value)">'+delBtn+'</div>'+imgArea+'</div></div></div>';
+      var imgSlot='';
+      if(d.image){
+        imgSlot='<div style="flex-shrink:0"><img src="'+d.image+'" class="dodont-image" onclick="openImgLightbox(this.src)"></div>';
+      } else if(modalEditMode){
+        imgSlot='<label class="dodont-img-placeholder"><svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="5" width="18" height="13" rx="2.5"/><circle cx="10" cy="12" r="3"/><path d="M6.5 5L8 2.5h4L13.5 5" stroke-linejoin="round"/></svg><input type="file" id="ddDetailImg'+i+'" accept="image/*" style="display:none" onchange="handleDetailDdImage(event,'+i+')"></label>';
+      } else {
+        imgSlot='<div style="width:64px;flex-shrink:0"></div>';
+      }
+      var textBlock='<div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:3px;min-width:0"><span style="font-size:10px;font-weight:600;letter-spacing:.5px;opacity:.4">'+label+'</span><input type="text" class="dodont-text-input" value="'+safeText+'" '+(modalEditMode?'':'readonly')+' style="padding:0;background:transparent;border:none;outline:none;font-size:14px;font-weight:500;cursor:'+(modalEditMode?'text':'default')+';min-width:0" onclick="event.stopPropagation()" onchange="editDodontText('+i+',this.value)"></div>';
+      return '<div style="display:flex;align-items:center;gap:6px"><div class="dodont-item dodont-'+d.type+'" draggable="true" ondragstart="ddDragStart(event,'+i+')" ondragover="ddDragOver(event)" ondragleave="ddDragLeave(event)" ondrop="ddDrop(event,'+i+')" ondragend="ddDragEnd(event)" style="flex:1">'+HANDLE_HTML+textBlock+imgSlot+'</div>'+delBtn+'</div>';
     }).join('');
   }
   document.getElementById('dodontAddArea').innerHTML='<div id="addDodontForm"></div>'+(modalEditMode?'<button class="btn-add-note" style="margin-top:8px" onclick="showAddDodontForm()">+ Do/Don\'t 추가</button>':'');
@@ -881,7 +848,7 @@ function ddDragEnd(e){e.currentTarget.classList.remove('dragging');document.quer
 let currentDodontImageData=null;
 function showAddDodontForm(){
   currentDodontImageData=null;
-  document.getElementById('addDodontForm').innerHTML=`<div class="dodont-entry" style="margin-top:12px;margin-bottom:8px;display:flex;flex-direction:column;gap:8px"><div style="display:flex;gap:6px"><select id="newDdType" style="padding:10px 28px 10px 14px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:14px;background:var(--surface);width:140px;-webkit-appearance:none;appearance:none;background-image:url(&quot;data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23999' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E&quot;);background-repeat:no-repeat;background-position:right 10px center;cursor:pointer;outline:none"><option value="do">DO</option><option value="dont">DON'T</option></select><input id="newDdText" placeholder="내용 입력" style="flex:1;padding:10px 14px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:14px;outline:none"><button class="btn btn-primary" style="padding:8px 14px;font-size:13px;flex-shrink:0" onclick="addDodontToComp()">추가</button><button class="btn" style="padding:8px 14px;font-size:13px;flex-shrink:0" onclick="renderDodont()">취소</button></div><input type="file" id="newDdImage" accept="image/*" onchange="handleDodontImageUpload(event)" style="padding:6px 12px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:13px;cursor:pointer"><div id="dodontImagePreview"></div></div>`;
+  document.getElementById('addDodontForm').innerHTML=`<div class="dodont-entry" style="margin-top:12px;margin-bottom:8px;display:flex;flex-direction:column;gap:8px"><div style="display:flex;gap:6px"><select id="newDdType" style="padding:10px 28px 10px 14px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:14px;background:var(--surface);width:140px;-webkit-appearance:none;appearance:none;background-image:url(&quot;data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23999' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E&quot;);background-repeat:no-repeat;background-position:right 10px center;cursor:pointer;outline:none"><option value="do">DO</option><option value="dont">DON'T</option></select><input id="newDdText" placeholder="내용 입력" style="flex:1;padding:10px 14px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:14px;outline:none"><button class="btn btn-primary" style="padding:8px 14px;font-size:13px;flex-shrink:0" onclick="addDodontToComp()">추가</button><button class="btn" style="padding:8px 14px;font-size:13px;flex-shrink:0" onclick="renderDodont()">취소</button></div><label id="newDdImageLabel" style="display:inline-flex;align-items:center;gap:6px;padding:7px 12px;border:1px dashed var(--border);border-radius:var(--radius-sm);font-size:13px;cursor:pointer;color:var(--text-3);background:transparent;transition:border-color .15s,color .15s" onmouseover="this.style.borderColor='#1a1a1a';this.style.color='#1a1a1a'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text-3)'"><svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" style="flex-shrink:0"><rect x="1" y="5" width="18" height="13" rx="2.5"/><circle cx="10" cy="12" r="3"/><path d="M6.5 5L8 2.5h4L13.5 5" stroke-linejoin="round"/></svg>이미지 추가<input type="file" id="newDdImage" accept="image/*" onchange="handleDodontImageUpload(event)" style="display:none"></label><div id="dodontImagePreview"></div></div>`;
   document.getElementById('newDdText').focus();
 }
 function handleDodontImageUpload(e){
@@ -897,10 +864,10 @@ function handleDodontImageUpload(e){
 }
 function addDodontToComp(){
   const type=document.getElementById('newDdType').value;const text=document.getElementById('newDdText').value.trim();
-  if(text){currentComp.dodont.push({type,text,image:currentDodontImageData||''});currentDodontImageData=null;renderDodont()}
+  if(text){currentComp.dodont.push({type,text,image:currentDodontImageData||''});currentDodontImageData=null;saveComp(currentComp);renderDodont()}
 }
 function toggleDodontMenu(i){openMenuIdx=openMenuIdx===i?null:i;renderDodont()}
-function deleteDodont(i){currentComp.dodont.splice(i,1);openMenuIdx=null;renderDodont()}
+function deleteDodont(i){currentComp.dodont.splice(i,1);openMenuIdx=null;saveComp(currentComp);renderDodont()}
 function showDodontImageUpload(i){
   currentDodontImageData=currentComp.dodont[i].image||'';
   const el=document.getElementById('modalDodont');
@@ -926,7 +893,7 @@ function handleEditDodontImageUpload(e){
 function editDodont(i){
   showDodontImageUpload(i);
 }
-function saveDodontEdit(i){currentComp.dodont[i].type=document.getElementById('editDdType').value;currentComp.dodont[i].text=document.getElementById('editDdText').value.trim();currentComp.dodont[i].image=currentDodontImageData||currentComp.dodont[i].image||'';renderDodont()}
+function saveDodontEdit(i){currentComp.dodont[i].type=document.getElementById('editDdType').value;currentComp.dodont[i].text=document.getElementById('editDdText').value.trim();currentComp.dodont[i].image=currentDodontImageData||currentComp.dodont[i].image||'';saveComp(currentComp);renderDodont()}
 
 function renderNote(){
   var c=document.getElementById('noteContainer');
@@ -938,8 +905,8 @@ function renderNote(){
   }
 }
 function showNoteInput(){document.getElementById('noteContainer').innerHTML=`<textarea class="note-area" id="noteInput" placeholder="메모, 블로커, 논의 사항...">${currentComp.note||''}</textarea><div class="note-actions"><button class="btn" onclick="renderNote()">취소</button><button class="btn btn-primary" onclick="saveNote()">저장</button></div>`;document.getElementById('noteInput').focus()}
-function saveNote(){currentComp.note=document.getElementById('noteInput').value.trim();renderNote()}
-function deleteNote(){currentComp.note='';renderNote()}
+function saveNote(){currentComp.note=document.getElementById('noteInput').value.trim();saveComp(currentComp);renderNote()}
+function deleteNote(){currentComp.note='';saveComp(currentComp);renderNote()}
 
 function renderTokenTabs(){
   const cats=['All',...new Set(currentComp.tokens.map(t=>t.cat))];
@@ -994,11 +961,11 @@ function showAddTokenForm(){
 function toggleNewTokSem(){newTokIsSem=!newTokIsSem;document.getElementById('newTokSem').classList.toggle('active',newTokIsSem)}
 function addTokenToComp(){
   const cat=document.getElementById('newTokCat').value;const name=document.getElementById('newTokName').value.trim();const desc=document.getElementById('newTokDesc').value.trim();
-  if(name){currentComp.tokens.push({cat,name,desc,isSemantic:newTokIsSem});renderTokenTabs();renderTokenList();renderStats();renderTokenSummary();renderTable()}
+  if(name){currentComp.tokens.push({cat,name,desc,isSemantic:newTokIsSem});saveComp(currentComp);renderTokenTabs();renderTokenList();renderStats();renderTokenSummary();renderTable()}
 }
 function toggleTokenMenu(i){openTokenMenuIdx=openTokenMenuIdx===i?null:i;renderTokenList()}
-function toggleTokenSemantic(i){if(!currentComp)return;currentComp.tokens[i].isSemantic=!currentComp.tokens[i].isSemantic;openTokenMenuIdx=null;renderTokenList();renderTokenSummary();renderTable()}
-function deleteToken(i){currentComp.tokens.splice(i,1);openTokenMenuIdx=null;renderTokenTabs();renderTokenList();renderStats();renderTokenSummary();renderTable()}
+function toggleTokenSemantic(i){if(!currentComp)return;currentComp.tokens[i].isSemantic=!currentComp.tokens[i].isSemantic;openTokenMenuIdx=null;saveComp(currentComp);renderTokenList();renderTokenSummary();renderTable()}
+function deleteToken(i){currentComp.tokens.splice(i,1);openTokenMenuIdx=null;saveComp(currentComp);renderTokenTabs();renderTokenList();renderStats();renderTokenSummary();renderTable()}
 // Helper functions for inline editing
 function renameProp(oldKey,newKey){
   const trimmed=newKey.trim();
@@ -1024,21 +991,14 @@ function importTokensJSONAdd(input){
   if(!file)return;
   const reader=new FileReader();
   reader.onload=function(e){
-    try{
-      const data=JSON.parse(e.target.result);
-      const tokensList=Object.entries(data).flatMap(([cat,tokens])=>
-        Object.entries(tokens).map(([name,val])=>({cat,name,desc:val,isSemantic:false}))
-      );
-      if(Array.isArray(data)){tokensList=data.filter(t=>t.cat&&t.name&&t.desc);}
-      tokensList.forEach(t=>{
-        if(t.cat&&t.name&&t.desc&&!currentComp.tokens.some(existing=>existing.name===t.name)){
-          currentComp.tokens.push({cat:t.cat,name:t.name,desc:t.desc,isSemantic:t.isSemantic||false});
-        }
-      });
-      renderTokenList();
-      renderTokenTabs();
-      input.value='';
-    }catch(err){alert('JSON 파일을 파싱할 수 없습니다: '+err.message);}
+    const result=parseTokensJSON(e.target.result);
+    if(result.error){alert(result.error);input.value='';return}
+    const existing=new Set(tokenEntries.map(t=>t.name));
+    result.tokens.forEach(t=>{
+      if(!existing.has(t.name)){tokenEntries.push(t);existing.add(t.name);}
+    });
+    renderTokenEntries();
+    input.value='';
   };
   reader.readAsText(file);
 }
@@ -1117,6 +1077,7 @@ function importTokensJSON(input){
     currentComp.tokens.push(...result.tokens);
     const d=new Date().toISOString().slice(0,10);
     currentComp.updates.unshift(`${d} JSON에서 토큰 ${result.tokens.length}개 가져옴`);
+    saveComp(currentComp);
     renderTokenTabs();renderTokenList();renderStats();renderTokenSummary();renderUpdates();renderTable();
     input.value='';
     alert(`${result.tokens.length}개 토큰을 가져왔습니다.`);
@@ -1130,12 +1091,13 @@ function renderUpdates(){
   el.innerHTML=currentComp.updates.map((u,i)=>{
     const date=u.split(' ')[0];const rest=u.slice(date.length+1);
     const restHtml=rest.replace(/\n/g,'<br>');
-    return`<div style="display:flex;gap:12px;padding:8px 0;align-items:flex-start;${i?'border-top:1px solid var(--border-light)':''}"><span style="font-size:13px;color:var(--text-3);flex-shrink:0;white-space:nowrap">${date}</span><span style="font-size:14px;color:var(--text);line-height:1.7">${restHtml}</span></div>`;
+    return`<div style="display:flex;gap:12px;padding:8px 0;align-items:center;${i?'border-top:1px solid var(--border-light)':''}"><span style="font-size:13px;color:var(--text-3);flex-shrink:0;white-space:nowrap">${date}</span><span style="font-size:14px;color:var(--text);line-height:1.7">${restHtml}</span></div>`;
   }).join('');
 }
 
 function updateStatus(p,v){
   if(!currentComp)return;currentComp.status[p]=v;
+  saveComp(currentComp);
   renderTable();renderStats();
 }
 function closeModal(force){
@@ -1147,7 +1109,7 @@ function closeModal(force){
     modalEditMode=false;
     preEditSnapshot=null;
   }
-  document.getElementById('overlay').classList.remove('active');currentComp=null;openMenuIdx=null;activeAddPropKey=null;
+  isModalOpen=false;document.getElementById('overlay').classList.remove('active');currentComp=null;openMenuIdx=null;activeAddPropKey=null;
 }
 function showEditExitConfirm(){
   document.getElementById('confirmOverlay').classList.add('active');
@@ -1165,6 +1127,7 @@ function showEditExitConfirm(){
       }
     }
     modalEditMode=false;preEditSnapshot=null;
+    isModalOpen=false;
     closeDeleteConfirm();
     document.getElementById('overlay').classList.remove('active');
     currentComp=null;openMenuIdx=null;activeAddPropKey=null;
@@ -1178,10 +1141,15 @@ function showDeleteConfirm(){
   document.getElementById('confirmOverlay').classList.add('active');
 }
 function closeDeleteConfirm(){document.getElementById('confirmOverlay').classList.remove('active');resetConfirmDialog()}
+function openImgLightbox(src){document.getElementById('imgLightboxImg').src=src;document.getElementById('imgLightbox').classList.add('active')}
+function closeImgLightbox(){document.getElementById('imgLightbox').classList.remove('active');document.getElementById('imgLightboxImg').src=''}
 function confirmDeleteComp(){
   if(!currentComp)return;
+  const deletedId=currentComp.id;
   components=components.filter(c=>c.id!==currentComp.id);
-  closeDeleteConfirm();closeModal();renderTable();renderStats();
+  deleteCompFromDB(deletedId);
+  isModalOpen=false;
+  closeDeleteConfirm();closeModal(true);renderTable();renderStats();
 }
 
 // Add form
@@ -1190,10 +1158,19 @@ function renderPropEntries(){document.getElementById('propsEntries').innerHTML=p
 function addPropEntry(){propEntries.push({key:'',opts:['','','']});renderPropEntries()}
 let ddEntries=[{type:'do',text:''},{type:'dont',text:''}];
 function renderDodontEntries(){document.getElementById('dodontEntries').innerHTML=ddEntries.map(function(d,i){
-  var imgPreview='';
-  if(d.image){imgPreview='<div style="margin-top:6px;position:relative;display:inline-block"><img src="'+d.image+'" style="max-width:200px;max-height:120px;border-radius:6px;display:block"><button onclick="ddEntries['+i+'].image=\'\';renderDodontEntries()" style="position:absolute;top:-6px;right:-6px;width:22px;height:22px;border-radius:50%;background:#999;border:2px solid #fff;color:#fff;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;line-height:1">✕</button></div>';}
-  else{imgPreview='<div style="margin-top:6px;background:#E8F5E9;border-radius:6px;padding:10px;text-align:center;cursor:pointer;width:120px" onclick="document.getElementById(\'ddImgInput'+i+'\').click()"><svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="#2E7D32" stroke-width="1.5"><line x1="10" y1="5" x2="10" y2="15"/><line x1="5" y1="10" x2="15" y2="10"/></svg></div><input type="file" id="ddImgInput'+i+'" accept="image/*" style="display:none" onchange="handleAddDdImage(event,'+i+')">';}
-  return '<div class="dodont-entry" style="flex-direction:column;align-items:flex-start"><div style="display:flex;gap:6px;align-items:center;width:100%"><select onchange="ddEntries['+i+'].type=this.value"><option value="do" '+(d.type==='do'?'selected':'')+'>DO</option><option value="dont" '+(d.type==='dont'?'selected':'')+">DON'T</option></select><input placeholder=\"내용 입력\" value=\""+d.text.replace(/"/g,'&quot;')+'\" oninput="ddEntries['+i+'].text=this.value" style="flex:1"><button class="btn-remove-dd" onclick="ddEntries.splice('+i+',1);renderDodontEntries()">&times;</button></div>'+imgPreview+'</div>';
+  var typeClass=d.type==='do'?'dodont-do':'dodont-dont';
+  var imgSlot='';
+  if(d.image){
+    imgSlot='<div style="flex-shrink:0;position:relative"><img src="'+d.image+'" class="dodont-image" onclick="openImgLightbox(this.src)"><button onclick="ddEntries['+i+'].image=\'\';renderDodontEntries()" style="position:absolute;top:-6px;right:-6px;width:20px;height:20px;border-radius:50%;background:#555;border:2px solid #fff;color:#fff;font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;line-height:1">✕</button></div>';
+  } else {
+    imgSlot='<label class="dodont-img-placeholder"><svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="5" width="18" height="13" rx="2.5"/><circle cx="10" cy="12" r="3"/><path d="M6.5 5L8 2.5h4L13.5 5" stroke-linejoin="round"/></svg><input type="file" id="ddImgInput'+i+'" accept="image/*" style="display:none" onchange="handleAddDdImage(event,'+i+')"></label>';
+  }
+  var doBg='#E8F5E9',doBorder='#C8E6C9',dontBg='#FFEBEE',dontBorder='#FFCDD2';
+  var selBg=d.type==='do'?doBg:dontBg,selBorder=d.type==='do'?doBorder:dontBorder;
+  var selW=d.type==='do'?'54px':'76px';
+  var labelSelect='<select onchange="ddEntries['+i+'].type=this.value;renderDodontEntries()" style="font-size:11px;font-weight:700;letter-spacing:.4px;width:'+selW+';background:'+selBg+';border:1px solid '+selBorder+';border-radius:var(--radius-sm);outline:none;cursor:pointer;-webkit-appearance:none;appearance:none;padding:5px 24px 5px 10px;color:inherit;font-family:inherit;flex-shrink:0;background-image:url(&quot;data:image/svg+xml,%3Csvg width=\'10\' height=\'6\' viewBox=\'0 0 10 6\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cpath d=\'M1 1l4 4 4-4\' stroke=\'currentColor\' stroke-width=\'1.8\' fill=\'none\' stroke-linecap=\'round\'/%3E%3C/svg%3E&quot;);background-repeat:no-repeat;background-position:right 8px center"><option value="do" '+(d.type==='do'?'selected':'')+'>DO</option><option value="dont" '+(d.type==='dont'?'selected':'')+">DON'T</option></select>";
+  var textBlock='<div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:3px;min-width:0">'+labelSelect+'<input placeholder="내용 입력" value="'+d.text.replace(/"/g,'&quot;')+'" oninput="ddEntries['+i+'].text=this.value" style="padding:0;background:transparent;border:none;outline:none;font-size:14px;font-weight:500;color:inherit;min-width:0"></div>';
+  return '<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><div class="dodont-item '+typeClass+'" style="flex:1">'+textBlock+imgSlot+'</div><button class="btn-remove-dd" onclick="ddEntries.splice('+i+',1);renderDodontEntries()">&times;</button></div>';
 }).join('')}
 function handleAddDdImage(e,i){var file=e.target.files[0];if(!file)return;var reader=new FileReader();reader.onload=function(ev){ddEntries[i].image=ev.target.result;renderDodontEntries()};reader.readAsDataURL(file)}
 function addDodontEntry(){ddEntries.push({type:'do',text:'',image:''});renderDodontEntries()}
@@ -1207,7 +1184,12 @@ function renderTokenEntries(){
   document.getElementById('tokensEntries').innerHTML=tokenEntries.map((t,i)=>`<div class="token-entry"><select class="tok-cat" onchange="tokenEntries[${i}].cat=this.value">${TOKEN_CATEGORIES.map(c=>`<option value="${c}" ${t.cat===c?'selected':''}>${c}</option>`).join('')}</select><input class="tok-name" placeholder="토큰명" value="${t.name.replace(/"/g,'&quot;')}" oninput="tokenEntries[${i}].name=this.value"><input class="tok-desc" placeholder="참조한 값" value="${t.desc.replace(/"/g,'&quot;')}" oninput="tokenEntries[${i}].desc=this.value"><button type="button" class="sem-toggle ${t.isSemantic?'active':''}" onclick="tokenEntries[${i}].isSemantic=!tokenEntries[${i}].isSemantic;renderTokenEntries()">시멘틱</button><button type="button" class="btn-remove-tok" onclick="tokenEntries.splice(${i},1);renderTokenEntries()">&times;</button></div>`).join('');
 }
 function addTokenEntry(){tokenEntries.push({cat:'Color',name:'',desc:'',isSemantic:false});renderTokenEntries()}
-function openAddModal(){propEntries=[{key:'',opts:['','','']},{key:'',opts:['','','']},{key:'',opts:['','','']}];ddEntries=[{type:'do',text:''},{type:'dont',text:''}];tokenEntries=[];newPriority='중';newTokenTypes=[];renderPropEntries();renderDodontEntries();renderTokenEntries();renderNewPriorityPills();renderNewTokenTypePills();document.getElementById('newName').value='';document.getElementById('addOverlay').classList.add('active')}
+let newPlatformStatus={design:'시작 전',ios:'시작 전',android:'시작 전',web:'시작 전'};
+function renderNewPlatformGrid(){
+  const platforms=[{key:'design',label:'Design',stages:DESIGN_STAGES},{key:'ios',label:'iOS',stages:DEV_STAGES},{key:'android',label:'Android',stages:DEV_STAGES},{key:'web',label:'Web',stages:DEV_STAGES}];
+  document.getElementById('newPlatformGrid').innerHTML=platforms.map(p=>`<div class="platform-card"><div class="label">${p.label}</div><select onchange="newPlatformStatus['${p.key}']=this.value">${p.stages.map(s=>`<option value="${s}" ${newPlatformStatus[p.key]===s?'selected':''}>${s}</option>`).join('')}</select></div>`).join('');
+}
+function openAddModal(){propEntries=[{key:'',opts:['','','']},{key:'',opts:['','','']},{key:'',opts:['','','']}];ddEntries=[{type:'do',text:''},{type:'dont',text:''}];tokenEntries=[];newPriority='중';newTokenTypes=[];newPlatformStatus={design:'시작 전',ios:'시작 전',android:'시작 전',web:'시작 전'};renderPropEntries();renderDodontEntries();renderTokenEntries();renderNewPriorityPills();renderNewTokenTypePills();renderNewPlatformGrid();document.getElementById('newName').value='';document.getElementById('newNote').value='';document.getElementById('addOverlay').classList.add('active')}
 function closeAddModal(){document.getElementById('addOverlay').classList.remove('active')}
 
 // Close filter menu on outside click
@@ -1229,7 +1211,10 @@ document.getElementById('confirmAdd').addEventListener('click',()=>{
   const props={};propEntries.forEach(p=>{if(p.key.trim()){const vals=p.opts.filter(o=>o.trim()).map(o=>o.trim());if(vals.length)props[p.key.trim()]=vals}});
   const dodont=ddEntries.filter(d=>d.text.trim()).map(d=>({type:d.type,text:d.text.trim()}));
   const tokens=tokenEntries.filter(t=>t.name.trim()).map(t=>({cat:t.cat,name:t.name.trim(),desc:t.desc.trim(),isSemantic:!!t.isSemantic}));
-  components.push({id:nextId++,name,props,status:{design:'시작 전',ios:'시작 전',android:'시작 전',web:'시작 전'},priority:newPriority,tokenTypes:newTokenTypes.slice(),tokens,dodont,note:'',hardcoded:'',updates:[new Date().toISOString().slice(0,10)+' 컴포넌트 추가']});
+  const note=document.getElementById('newNote').value.trim();
+  const newComp={id:nextId++,name,props,status:{...newPlatformStatus},priority:newPriority,tokenTypes:newTokenTypes.slice(),tokens,dodont,note,hardcoded:'',updates:[new Date().toISOString().slice(0,10)+' 컴포넌트 추가']};
+  components.push(newComp);
+  saveComp(newComp);
   closeAddModal();renderTable();renderStats();
 });
 
@@ -1242,7 +1227,7 @@ window.addEventListener('scroll',()=>{
   if(trigger<0){nav.classList.add('visible')}else{nav.classList.remove('visible')}
 },{passive:true});
 
-renderTable();renderStats();renderPropEntries();renderDodontEntries();
+initFirebase();renderPropEntries();renderDodontEntries();
 </script>
 </body>
 </html>
