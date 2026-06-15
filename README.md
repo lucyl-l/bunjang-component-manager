@@ -104,12 +104,6 @@ Firestore `components` 컬렉션에 컴포넌트 단위로 저장됩니다.
 - **데이터** · Firebase Firestore (Spark 요금제)
 - **배포** · GitHub Pages (main 브랜치 자동 배포)
 
-## 로드맵
-
-- [ ] 컴포넌트 검색·필터 고도화
-- [ ] 진행률 통계 대시보드
-- [ ] 변경 이력 내보내기
-
 ## 유의 사항
 
 - API 키는 `lucyl-l.github.io` 도메인에서만 동작하도록 제한되어 있습니다.
