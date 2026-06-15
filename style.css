@@ -64,21 +64,24 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .filter-select{padding:11px 28px 11px 14px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:14px;background:var(--surface);outline:none;cursor:pointer;color:var(--text);width:140px;-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23999' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center}
 
 /* Table */
-.table-wrap{background:var(--surface);border:1px solid var(--border-light);border-radius:var(--radius);overflow:hidden}
-table{width:100%;border-collapse:collapse;table-layout:fixed}
-colgroup col.c-name{width:16%}
-colgroup col.c-priority{width:8%}
-colgroup col.c-token{width:18%}
+.table-wrap{background:var(--surface);border:1px solid var(--border-light);border-radius:var(--radius);overflow-x:auto}
+table{width:100%;min-width:1280px;border-collapse:collapse;table-layout:fixed}
+colgroup col.c-name{width:24%}
+colgroup col.c-priority{width:7%}
+colgroup col.c-token{width:19%}
 colgroup col.c-design{width:10%}
 colgroup col.c-ios{width:10%}
 colgroup col.c-android{width:10%}
 colgroup col.c-web{width:10%}
-colgroup col.c-update{width:18%}
+colgroup col.c-update{width:10%}
 thead{background:#fafafa}
-th{padding:9px 16px;text-align:left;font-size:14px;font-weight:600;color:#555;border-bottom:1px solid var(--border);border-right:1px solid var(--border-light)}
+th{padding:9px 16px;text-align:center;font-size:14px;font-weight:600;color:#555;border-bottom:1px solid var(--border);border-right:1px solid var(--border-light)}
 th:last-child{border-right:none}
-td{padding:16px 16px;border-bottom:1px solid var(--border-light);border-right:1px solid var(--border-light);font-size:15px;vertical-align:middle}
+td{padding:16px 16px;border-bottom:1px solid var(--border-light);border-right:1px solid var(--border-light);font-size:15px;vertical-align:middle;text-align:center}
 td:last-child{border-right:none}
+/* 컴포넌트(이름) 열만 좌측 정렬, 나머지는 가운데 */
+thead tr:first-child th:first-child{text-align:left}
+tbody td:first-child{text-align:left}
 tbody tr:hover{cursor:pointer}
 tbody tr:hover td{background:#fafafa}
 .comp-name{font-weight:600;font-size:15px}
@@ -96,13 +99,13 @@ td.col-update{font-size:13px;color:var(--text-3)}
 /* Priority tags */
 .priority-tag{display:inline-flex;align-items:center;justify-content:center;padding:3px 10px;border-radius:12px;font-size:12px;font-weight:600;border:1px solid;line-height:1.3;white-space:nowrap}
 .priority-tag.p-high{background:#FFEBEE;color:#C62828;border-color:#FFCDD2}
-.priority-tag.p-mid{background:#FFF8E1;color:#F57F17;border-color:#FFE082}
-.priority-tag.p-low{background:#E3F2FD;color:#1565C0;border-color:#BBDEFB}
+.priority-tag.p-mid{background:#F2F3F5;color:#4B5563;border-color:#E5E7EB}
+.priority-tag.p-low{background:#F2F3F5;color:#9AA1AE;border-color:#E5E7EB}
 .priority-tag.p-done{background:#F5F5F5;color:#9E9E9E;border-color:#E0E0E0}
 
 /* Token type tags */
-.token-types-cell{display:flex;flex-wrap:wrap;gap:4px}
-.token-type-tag{display:inline-flex;align-items:center;padding:3px 9px;border-radius:10px;font-size:13px;font-weight:500;line-height:1.5;white-space:nowrap}
+.token-types-cell{display:flex;flex-wrap:wrap;gap:4px;justify-content:center}
+.token-type-tag{display:inline-flex;align-items:center;padding:3px 9px;border-radius:10px;font-size:13px;font-weight:500;line-height:1.5;white-space:nowrap;flex-shrink:0}
 .token-type-tag.tt-comp{background:#F5F5F5;color:#555}
 .token-type-tag.tt-sem{background:#F5F5F5;color:#555}
 .token-type-tag.tt-hard{background:#F5F5F5;color:#555}
@@ -159,7 +162,7 @@ th.g-label{text-align:center;font-size:13px;font-weight:600;padding:9px 16px;bor
 .overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.4);z-index:100;justify-content:center;align-items:center;padding:24px}
 .overlay.active{display:flex}
 .modal{background:var(--surface);border-radius:14px;width:100%;max-width:780px;max-height:90vh;overflow-y:auto;position:relative}
-.modal-header{padding:24px 28px 0;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:var(--surface);border-radius:14px 14px 0 0;z-index:1}
+.modal-header{padding:24px 28px 16px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:var(--surface);border-radius:14px 14px 0 0;z-index:1}
 .modal-header h2{font-size:21px;font-weight:600}
 .modal-body{padding:20px 28px 28px}
 .section{margin-bottom:36px}
@@ -336,3 +339,24 @@ th.g-label{text-align:center;font-size:13px;font-weight:600;padding:9px 16px;bor
 .btn-delete-comp:hover{
   color:#B71C1C;
 }
+
+/* Row drag-to-reorder (테이블 컴포넌트 순서 변경) */
+.comp-name{display:flex;align-items:center;position:relative}
+.row-drag-handle{position:absolute;left:-15px;top:50%;transform:translateY(-50%);display:inline-flex;align-items:center;justify-content:center;width:14px;color:#ccc;cursor:grab;font-size:13px;line-height:1;opacity:0;transition:opacity .15s;flex-shrink:0}
+tbody tr:hover .row-drag-handle{opacity:1}
+.row-drag-handle:active{cursor:grabbing}
+tbody tr[draggable="true"] .row-drag-handle:hover{color:#888}
+tbody tr.row-dragging{opacity:.4}
+tbody tr.row-drag-over td{border-top:2px solid #1a1a1a}
+
+/* Inline status badge — 토큰 타입 태그와 동일한 스타일, 색만 상태별 유지 */
+.status-dot.status-editable{display:inline-flex;align-items:center;padding:3px 9px;border-radius:10px;font-size:13px;font-weight:500;line-height:1.5;white-space:nowrap;background:#F5F5F5;color:#555;transition:box-shadow .15s,filter .15s;max-width:100%}
+.status-dot.status-editable .dot{display:none}
+.status-dot.status-editable.s-done{background:#E7F6EC;color:#1B873F}
+.status-dot.status-editable.s-progress{background:#E8F0FE;color:#1D4ED8}
+.status-dot.status-editable.s-not{background:#F1F2F4;color:#9AA1AE}
+.status-dot.status-editable .status-select{-webkit-appearance:none;appearance:none;border:none;background:transparent;color:inherit;font:inherit;font-size:inherit;font-weight:inherit;cursor:pointer;padding:0;outline:none;max-width:100%;text-align:center;text-align-last:center}
+.status-dot.status-editable .status-select option{color:#1a1a1a;font-weight:500}
+/* 호버 시에만 선택 가능 느낌 (얇은 테두리 + 살짝 진하게) */
+tbody tr:hover .status-dot.status-editable{box-shadow:inset 0 0 0 1px rgba(0,0,0,.06)}
+.status-dot.status-editable:hover{box-shadow:inset 0 0 0 1px rgba(0,0,0,.14);filter:brightness(.98)}

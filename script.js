@@ -1,5 +1,22 @@
-const DESIGN_STAGES=['시작 전','구조 설계','MD 작성','컴포넌트 제작','디자인QA','완료'];
-const DEV_STAGES=['시작 전','개발','코드리뷰','운영 적용','완료'];
+const DESIGN_STAGES=['시작 전','구조 설계 중','컴포넌트 제작 중','컴포넌트 수정 중','크로스체크 진행 중','컴포넌트 제작 완료'];
+const DEV_STAGES=['시작 전','MCP 연동 중','MCP 연동 완료','크로스체크 진행 중','코드리뷰 중','완료'];
+// 의미 판정: 미시작/완료(종료) 상태 — 색상·통계·필터 공용
+const NOT_STARTED_STATES=['시작 전','시작전'];
+const DONE_STATES=[DESIGN_STAGES[DESIGN_STAGES.length-1],DEV_STAGES[DEV_STAGES.length-1]]; // ['컴포넌트 제작 완료','완료']
+function isNotStarted(v){return NOT_STARTED_STATES.indexOf(v)>=0}
+function isDoneState(v){return DONE_STATES.indexOf(v)>=0}
+// 옛 단계값 → 새 단계값 자동 변환 맵 (플랫폼별)
+const DESIGN_MIGRATE={'시작 전':'시작 전','구조 설계':'구조 설계 중','MD 작성':'구조 설계 중','컴포넌트 제작':'컴포넌트 제작 중','디자인QA':'크로스체크 진행 중','완료':'컴포넌트 제작 완료'};
+const DEV_MIGRATE={'시작전':'시작 전','개발':'MCP 연동 중','코드리뷰':'코드리뷰 중','운영 적용':'완료','완료':'완료'};
+function migrateComp(c){
+  if(!c||!c.status)return false;
+  let changed=false;
+  if(DESIGN_MIGRATE[c.status.design]&&DESIGN_MIGRATE[c.status.design]!==c.status.design){c.status.design=DESIGN_MIGRATE[c.status.design];changed=true;}
+  ['ios','android','web'].forEach(function(k){
+    if(DEV_MIGRATE[c.status[k]]&&DEV_MIGRATE[c.status[k]]!==c.status[k]){c.status[k]=DEV_MIGRATE[c.status[k]];changed=true;}
+  });
+  return changed;
+}
 const CAT_COLORS={Color:['#EDE7F6','#5E35B1'],Typography:['#E3F2FD','#1565C0'],Spacing:['#E8F5E9','#2E7D32'],Sizing:['#E0F7FA','#00838F'],Radius:['#FFF3E0','#E65100'],Layout:['#F3E5F5','#6A1B9A']};
 const PRIORITIES=[{val:'상',cls:'p-high'},{val:'중',cls:'p-mid'},{val:'하',cls:'p-low'},{val:'완료',cls:'p-done'}];
 const PRIORITY_CLS={상:'p-high',중:'p-mid',하:'p-low',완료:'p-done'};
@@ -39,16 +56,39 @@ function initFirebase(){
   db.collection('components').onSnapshot(function(snapshot){
     if(isModalOpen)return;
     components=snapshot.docs.map(function(doc){return doc.data()});
-    components.sort(function(a,b){return a.id-b.id});
+    components.forEach(function(c){if(migrateComp(c))saveComp(c);}); // 옛 상태값 → 새 단계 자동 변환(1회)
+    components.sort(function(a,b){var ao=(a.order==null?a.id:a.order),bo=(b.order==null?b.id:b.order);return ao!==bo?ao-bo:a.id-b.id});
     nextId=components.length>0?Math.max.apply(null,components.map(function(c){return c.id}))+1:1;
     renderTable();renderStats();
   },function(err){console.error('Firestore 오류:',err);});
 }
 // ─────────────────────────────────────────────────
 
-function getStatusClass(v){return v==='완료'?'s-done':v==='시작 전'?'s-not':'s-progress'}
-function getStatusLabel(v){return v==='완료'||v==='시작 전'?v:v+' 중'}
-function countDone(p){return components.filter(c=>c.status[p]==='완료').length}
+function getStatusClass(v){return isDoneState(v)?'s-done':isNotStarted(v)?'s-not':'s-progress'}
+function getStatusLabel(v){return v}
+function countDone(p){return components.filter(c=>isDoneState(c.status[p])).length}
+function platLabel(p){return p==='design'?'Design':p==='ios'?'iOS':p==='android'?'Android':'Web'}
+// 색깔 점 + 드롭다운(즉시 수정). 테이블/모달 공용
+function statusSelectHTML(comp,p){
+  const stages=p==='design'?DESIGN_STAGES:DEV_STAGES;
+  const v=comp.status[p];
+  const cls=getStatusClass(v);
+  const opts=stages.map(s=>`<option value="${s}" ${v===s?'selected':''}>${getStatusLabel(s)}</option>`).join('');
+  return`<span class="status-dot ${cls} status-editable" onclick="event.stopPropagation()"><span class="dot"></span><select class="status-select" onclick="event.stopPropagation()" onchange="setStatusDirect(${comp.id},'${p}',this.value)">${opts}</select></span>`;
+}
+// 수정 모드 진입 없이 상태값 즉시 변경 + 저장 + 이력 기록
+function setStatusDirect(id,p,v){
+  const comp=components.find(c=>c.id===id);
+  if(!comp||comp.status[p]===v)return;
+  const old=comp.status[p];
+  comp.status[p]=v;
+  const d=new Date().toISOString().slice(0,10);
+  if(!comp.updates)comp.updates=[];
+  comp.updates.unshift(d+' '+platLabel(p)+' '+old+' → '+v);
+  saveComp(comp);
+  renderTable();renderStats();
+  if(isModalOpen&&currentComp&&currentComp.id===id){renderModalPlatforms();renderUpdates();}
+}
 
 function renderStats(){
   const t=components.length,tk=components.reduce((s,c)=>s+c.tokens.length,0);
@@ -95,26 +135,52 @@ function updateFilterMenuHighlight(){
 function getFiltered(){
   const q=document.getElementById('search').value.toLowerCase();
   const{platform,status}=currentFilter;
+  function matchStatusFilter(v,s){return s==='진행중'?(!isNotStarted(v)&&!isDoneState(v)):s==='완료'?isDoneState(v):s==='시작 전'?isNotStarted(v):v===s}
   return components.filter(c=>{
     if(!c.name.toLowerCase().includes(q))return false;
     if(platform==='all'&&status==='all')return true;
     if(platform==='all'&&status!=='all'){
-      return['design','ios','android','web'].some(p=>{const v=c.status[p];return status==='진행중'?v!=='시작 전'&&v!=='완료':v===status});
+      return['design','ios','android','web'].some(p=>matchStatusFilter(c.status[p],status));
     }
     if(platform!=='all'&&status==='all')return true;
-    const v=c.status[platform];
-    return status==='진행중'?v!=='시작 전'&&v!=='완료':v===status;
+    return matchStatusFilter(c.status[platform],status);
   });
 }
 
+function renderModalPlatforms(){
+  // 수정 모드 여부와 무관하게 동일한 뱃지 디자인(즉시 저장)으로 표시
+  const plats=[{key:'design',label:'Design'},{key:'ios',label:'iOS'},{key:'android',label:'Android'},{key:'web',label:'Web'}];
+  document.getElementById('modalPlatforms').innerHTML=plats.map(p=>
+    `<div class="platform-card"><div class="label">${p.label}</div><div style="padding:4px 0;display:flex;justify-content:center">${statusSelectHTML(currentComp,p.key)}</div></div>`
+  ).join('');
+}
 function renderTable(){
   const f=getFiltered();
+  const isFiltered=document.getElementById('search').value.trim()!==''||currentFilter.platform!=='all'||currentFilter.status!=='all';
   document.getElementById('emptyState').style.display=f.length?'none':'block';
   document.getElementById('tableBody').innerHTML=f.map(c=>{
     const d=c.updates.length?c.updates[0].split(' ')[0]:'';
-    const dot=v=>`<span class="status-dot ${getStatusClass(v)}">${getStatusLabel(v)}</span>`;
-    return`<tr onclick="openModal(${c.id})"><td class="gx-end"><div class="comp-name">${c.name}</div></td><td>${priorityTagHTML(c.priority)}</td><td class="gx-end">${tokenTypesCellHTML(c)}</td><td class="gx-end">${dot(c.status.design)}</td><td>${dot(c.status.ios)}</td><td>${dot(c.status.android)}</td><td class="gx-end">${dot(c.status.web)}</td><td class="col-update">${d}</td></tr>`;
+    const dropAttrs=isFiltered?'':` ondragover="rowDragOver(event,${c.id})" ondragleave="rowDragLeave(event)" ondrop="rowDrop(event,${c.id})"`;
+    const handle=isFiltered?'':`<span class="row-drag-handle" draggable="true" title="드래그하여 순서 변경" ondragstart="rowDragStart(event,${c.id})" ondragend="rowDragEnd(event)" onclick="event.stopPropagation()">⠿</span>`;
+    return`<tr${dropAttrs} onclick="openModal(${c.id})"><td class="gx-end"><div class="comp-name">${handle}${c.name}</div></td><td>${priorityTagHTML(c.priority)}</td><td class="gx-end">${tokenTypesCellHTML(c)}</td><td class="gx-end">${statusSelectHTML(c,'design')}</td><td>${statusSelectHTML(c,'ios')}</td><td>${statusSelectHTML(c,'android')}</td><td class="gx-end">${statusSelectHTML(c,'web')}</td><td class="col-update">${d}</td></tr>`;
   }).join('');
+}
+
+// Row drag-to-reorder (테이블 컴포넌트 순서 변경)
+let draggedRowId=null;
+function rowDragStart(e,id){draggedRowId=id;const tr=e.currentTarget.closest('tr');if(tr)tr.classList.add('row-dragging');e.dataTransfer.effectAllowed='move';try{e.dataTransfer.setData('text/plain',String(id))}catch(_){}}
+function rowDragOver(e,id){e.preventDefault();e.dataTransfer.dropEffect='move';document.querySelectorAll('tr.row-drag-over').forEach(el=>el.classList.remove('row-drag-over'));if(draggedRowId!==id)e.currentTarget.classList.add('row-drag-over')}
+function rowDragLeave(e){e.currentTarget.classList.remove('row-drag-over')}
+function rowDrop(e,id){e.preventDefault();document.querySelectorAll('tr.row-drag-over').forEach(el=>el.classList.remove('row-drag-over'));if(draggedRowId===null||draggedRowId===id){draggedRowId=null;return}moveComponent(draggedRowId,id);draggedRowId=null}
+function rowDragEnd(e){const tr=e.currentTarget.closest('tr');if(tr)tr.classList.remove('row-dragging');document.querySelectorAll('tr.row-dragging,tr.row-drag-over').forEach(el=>el.classList.remove('row-dragging','row-drag-over'));draggedRowId=null}
+function moveComponent(fromId,toId){
+  const fromIdx=components.findIndex(c=>c.id===fromId);
+  const toIdx=components.findIndex(c=>c.id===toId);
+  if(fromIdx<0||toIdx<0||fromIdx===toIdx)return;
+  const moved=components.splice(fromIdx,1)[0];
+  components.splice(toIdx,0,moved);
+  components.forEach(function(c,i){if(c.order!==i){c.order=i;saveComp(c);}});
+  renderTable();
 }
 
 function openModal(id){
@@ -125,23 +191,13 @@ function openModal(id){
   if(currentComp.hardcoded==null)currentComp.hardcoded='';
   modalEditMode=false;
   preEditSnapshot=JSON.parse(JSON.stringify(currentComp));
-  document.getElementById('modalTitle').textContent=currentComp.name;
+  renderModalTitle();
   document.getElementById('editModeBtn').style.display='none';
   document.getElementById('editModeBtn2').textContent='수정';document.getElementById('deleteCompBtn').style.display='none';
   /*editModeFooterBtn removed*/
   document.getElementById('deleteCompBtn').style.display='none';
   renderPriority();renderTokenSummary();
-  const plats=[{key:'design',label:'Design',stages:DESIGN_STAGES},{key:'ios',label:'iOS',stages:DEV_STAGES},{key:'android',label:'Android',stages:DEV_STAGES},{key:'web',label:'Web',stages:DEV_STAGES}];
-  document.getElementById('modalPlatforms').innerHTML=plats.map(p=>{
-    if(modalEditMode){
-      const o=p.stages.map(s=>`<option value="${s}" ${currentComp.status[p.key]===s?'selected':''}>${getStatusLabel(s)}</option>`).join('');
-      return`<div class="platform-card"><div class="label">${p.label}</div><select onchange="updateStatus('${p.key}',this.value)">${o}</select></div>`;
-    }else{
-      const v=currentComp.status[p.key];
-      const cls=v==='완료'?'s-done':v==='시작 전'?'s-not':'s-progress';
-      return`<div class="platform-card"><div class="label">${p.label}</div><div style="padding:4px 0"><span class="status-dot ${cls}">${getStatusLabel(v)}</span></div></div>`;
-    }
-  }).join('');
+  renderModalPlatforms();
   renderProps();
   activeTokenCat='All';renderTokenTabs();renderTokenList();renderDodont();renderNote();renderHardcoded();
   renderUpdates();
@@ -159,38 +215,32 @@ function toggleEditMode(){
     document.getElementById('editModeBtn').textContent='수정';document.getElementById('editModeBtn2').textContent='수정';document.getElementById('deleteCompBtn').style.display='none';
     /*editModeFooterBtn removed*/
     document.getElementById('deleteCompBtn').style.display='none';
+    currentComp.name=(currentComp.name&&currentComp.name.trim())?currentComp.name.trim():preEditSnapshot.name; // 빈 이름 방지
     compareAndLogChanges();
     tokensReplacedByJson=false;
     saveComp(currentComp);
   }
+  renderModalTitle();
   renderPriority();renderProps();renderDodont();renderNote();renderTokenList();renderHardcoded();
-  const plats=[{key:'design',label:'Design',stages:DESIGN_STAGES},{key:'ios',label:'iOS',stages:DEV_STAGES},{key:'android',label:'Android',stages:DEV_STAGES},{key:'web',label:'Web',stages:DEV_STAGES}];
-  document.getElementById('modalPlatforms').innerHTML=plats.map(p=>{
-    if(modalEditMode){
-      const o=p.stages.map(s=>`<option value="${s}" ${currentComp.status[p.key]===s?'selected':''}>${getStatusLabel(s)}</option>`).join('');
-      return`<div class="platform-card"><div class="label">${p.label}</div><select onchange="updateStatus('${p.key}',this.value)">${o}</select></div>`;
-    }else{
-      const v=currentComp.status[p.key];
-      const cls=v==='완료'?'s-done':v==='시작 전'?'s-not':'s-progress';
-      return`<div class="platform-card"><div class="label">${p.label}</div><div style="padding:4px 0"><span class="status-dot ${cls}">${getStatusLabel(v)}</span></div></div>`;
-    }
-  }).join('');
+  renderModalPlatforms();
   renderTable();renderUpdates();renderStats();
 }
+function renderModalTitle(){
+  const el=document.getElementById('modalTitle');
+  if(modalEditMode){
+    el.innerHTML='<input type="text" value="'+(currentComp.name||'').replace(/"/g,'&quot;')+'" oninput="updateCompName(this.value)" placeholder="컴포넌트명" style="font-size:21px;font-weight:600;border:none;outline:none;padding:6px 12px;width:100%;max-width:440px;background:#f6f6f6;border-radius:8px;color:inherit;font-family:inherit">';
+  }else{
+    el.textContent=currentComp.name;
+  }
+}
+function updateCompName(v){if(currentComp)currentComp.name=v;}
 
 function compareAndLogChanges(){
   if(!preEditSnapshot)return;
   const d=new Date().toISOString().slice(0,10);
   const changes=[];
-  if(preEditSnapshot.priority!==currentComp.priority){changes.push('우선순위 '+(preEditSnapshot.priority||'중')+' → '+currentComp.priority);}
-  if(JSON.stringify(preEditSnapshot.status)!==JSON.stringify(currentComp.status)){
-    Object.keys(currentComp.status).forEach(function(k){
-      if(preEditSnapshot.status[k]!==currentComp.status[k]){
-        var label=k==='design'?'Design':k==='ios'?'iOS':k==='android'?'Android':'Web';
-        changes.push(label+' '+preEditSnapshot.status[k]+' → '+currentComp.status[k]);
-      }
-    });
-  }
+  if((preEditSnapshot.name||'')!==(currentComp.name||'')){changes.push('이름 '+preEditSnapshot.name+' → '+currentComp.name);}
+  // 우선순위·플랫폼 상태는 수정 모드와 무관하게 즉시 저장·기록되므로 여기선 비교하지 않음(중복 방지)
   if(JSON.stringify(preEditSnapshot.props)!==JSON.stringify(currentComp.props)){changes.push('Props 수정');}
   if(!tokensReplacedByJson&&JSON.stringify(preEditSnapshot.tokens)!==JSON.stringify(currentComp.tokens)){
     var oldT=preEditSnapshot.tokens||[];var newT=currentComp.tokens||[];
@@ -238,13 +288,17 @@ function compareAndLogChanges(){
 }
 function renderPriority(){
   const cur=currentComp.priority||'중';
-  document.getElementById('modalPriority').innerHTML=PRIORITIES.map(p=>`<button class="pill-btn ${p.cls} ${cur===p.val?'active':''}" ${modalEditMode?`onclick="setPriority('${p.val}')"`:''} ${!modalEditMode?'style="cursor:default;pointer-events:none"':''}>${p.val}</button>`).join('');
+  document.getElementById('modalPriority').innerHTML=PRIORITIES.map(p=>`<button class="pill-btn ${p.cls} ${cur===p.val?'active':''}" onclick="setPriority('${p.val}')">${p.val}</button>`).join('');
 }
 function setPriority(p){
-  if(!currentComp||!modalEditMode)return;
-  if(currentComp.priority===p)return;
+  if(!currentComp||currentComp.priority===p)return;
+  const old=currentComp.priority||'중';
   currentComp.priority=p;
-  renderPriority();
+  const d=new Date().toISOString().slice(0,10);
+  if(!currentComp.updates)currentComp.updates=[];
+  currentComp.updates.unshift(d+' 우선순위 '+old+' → '+p);
+  saveComp(currentComp);
+  renderPriority();renderTable();renderStats();renderUpdates();
 }
 function renderTokenSummary(){
   const hasSem=currentComp.tokens&&currentComp.tokens.some(t=>t.isSemantic);
@@ -479,7 +533,7 @@ function renderTokenList(){
     }else{
       var chipCls=t.isSemantic?'tt-sem':'tt-default';
       var chipText=t.isSemantic?'시멘틱':'컴포넌트';
-      var chipColor=t.isSemantic?'background:#E1F5FE;color:#0277BD;':'';
+      var chipColor=t.isSemantic?'background:#E1F5FE;color:#0277BD;':'background:#EDEEF0;color:#5F6368;';
       var chipHtml='<span class="token-type-tag '+chipCls+'" style="padding:1px 6px;font-size:10px;display:inline-block;margin-bottom:4px;'+chipColor+'">'+chipText+'</span>';
       html+='<div class="token-item" style="display:flex;align-items:flex-start;gap:8px;padding:10px 16px">'
         +'<div style="width:'+nameChWidth+'px;flex-shrink:0">'+chipHtml+'<div class="name" style="display:block" title="'+safeN+'">'+t.name+'</div></div>'
@@ -751,7 +805,8 @@ document.getElementById('confirmAdd').addEventListener('click',()=>{
   const tokens=tokenEntries.filter(t=>t.name.trim()).map(t=>({cat:t.cat,name:t.name.trim(),desc:t.desc.trim(),isSemantic:!!t.isSemantic}));
   const note=document.getElementById('newNote').value.trim();
   const hardcoded=document.getElementById('newHardcoded').value.trim();
-  const newComp={id:nextId++,name,props,status:{...newPlatformStatus},priority:newPriority,tokenTypes:[],tokens,dodont,note,hardcoded,updates:[new Date().toISOString().slice(0,10)+' 컴포넌트 추가']};
+  const newOrder=components.length?Math.max.apply(null,components.map(function(c){return c.order==null?c.id:c.order}))+1:0;
+  const newComp={id:nextId++,order:newOrder,name,props,status:{...newPlatformStatus},priority:newPriority,tokenTypes:[],tokens,dodont,note,hardcoded,updates:[new Date().toISOString().slice(0,10)+' 컴포넌트 추가']};
   components.push(newComp);
   saveComp(newComp);
   closeAddModal();renderTable();renderStats();
